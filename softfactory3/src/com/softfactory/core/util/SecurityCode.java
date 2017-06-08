@@ -91,7 +91,7 @@ public class SecurityCode {
 			}
 		}
 		for(char s:result){
-			System.out.print("验证码："+s);
+			System.out.print(s);
 		}
 		return String.valueOf(result);
 	}

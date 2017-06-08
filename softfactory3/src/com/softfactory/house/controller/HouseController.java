@@ -3,6 +3,7 @@ package com.softfactory.house.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import com.softfactory.house.service.HouseService;
 import com.softfactory.pojo.House;
 import com.softfactory.pojo.User;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
@@ -26,6 +28,31 @@ import net.sf.json.JsonConfig;
 public class HouseController {
 	@Resource(name="houseService")
 	private HouseService houseService;
+	
+	@RequestMapping("/userController_find")
+	public void userFind(HttpServletResponse response){
+		List<User> users = houseService.findUser();
+//		for(User u:users){
+//			System.out.println(u.getUsername());
+//		}
+		User user = new User();
+		user.setId(0);
+		user.setUsername("请选择");
+		users.add(user);
+		JsonConfig jsonConfig = new JsonConfig();
+	    jsonConfig.setExcludes(new String[] { "password","status","userSex","userEmail","userPhone","orderses","customers","houses","tasks","follows"});
+	    JSON json = JSONSerializer.toJSON(users, jsonConfig);
+	    PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.println(json.toString());
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@RequestMapping("/houseController_list")
 	public void list(
@@ -42,6 +69,7 @@ public class HouseController {
 			@RequestParam(required=false,value="houseDecorate") String houseDecorate,
 			@RequestParam(required=false,value="houseProfee") String houseProfee,
 			@RequestParam(required=false,value="houseAge") String houseAge,
+			@RequestParam(required=true,value="houseType,") String houseType,
 			@RequestParam(required=false,value="houseSort") String houseSort,
 			@RequestParam(required=false,value="houseConfig") String houseConfig,
 			@RequestParam(required=false,value="houseFacility") String houseFacility,
@@ -53,7 +81,7 @@ public class HouseController {
 			Integer pageno = (page-1)*row;
 			Integer pagesize = page*row;
 			Pager<House> pager = 
-			houseService.findPager(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, houseConfig, houseFacility, houseWay, houseDirection, null, id);
+			houseService.findPager(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, "1", houseConfig, houseFacility, houseWay, houseDirection, null, id);
 			JsonConfig jsonConfig = new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
 			jsonConfig.registerJsonValueProcessor(User.class, new UserValueProcessor());
@@ -94,8 +122,9 @@ public class HouseController {
 			HttpServletResponse response){
 			Integer pageno = (page-1)*row;
 			Integer pagesize = page*row;
+			//"0"是表示type=0是租房
 			Pager<House> pager = 
-			houseService.findPager(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, houseConfig, houseFacility, houseWay, houseDirection, null, id);
+			houseService.findPager(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, "0", houseConfig, houseFacility, houseWay, houseDirection, null, id);
 			JsonConfig jsonConfig = new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
 			jsonConfig.registerJsonValueProcessor(User.class, new UserValueProcessor());

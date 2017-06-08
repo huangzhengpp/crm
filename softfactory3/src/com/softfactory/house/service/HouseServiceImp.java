@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.softfactory.core.util.Pager;
 import com.softfactory.house.dao.HouseMapper;
 import com.softfactory.pojo.House;
+import com.softfactory.pojo.User;
 @Service("houseService")
 @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 public class HouseServiceImp implements HouseService {
@@ -49,15 +50,21 @@ public class HouseServiceImp implements HouseService {
 	@Override
 	public Pager<House> findPager(Integer pageno, Integer pagesize, String sort, String order, String houseArea,
 			String houseAddr, Double housePprice, String houseHouses, Double houseTprice, String houseModel,
-			String houseDecorate, String houseProfee, String houseAge, String houseSort, String houseConfig,
+			String houseDecorate, String houseProfee, String houseAge, String houseSort,String houseType, String houseConfig,
 			String houseFacility, String houseWay, String houseDirection, String houseMark, Integer id) {
 
 		Pager<House> pager = new Pager<House>();
 		//设置分页数据
-		pager.setRows(houseMapper.findPager(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, houseConfig, houseFacility, houseWay, houseDirection, houseMark, id));
+		pager.setRows(houseMapper.findPager(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, houseType, houseConfig, houseFacility, houseWay, houseDirection, houseMark, id));
+
 		//设置数据总数
-		pager.setTotal(houseMapper.findPagerTotal(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, houseConfig, houseFacility, houseWay, houseDirection, houseMark, id));
+		pager.setTotal(houseMapper.findPagerTotal(pageno, pagesize, sort, order, houseArea, houseAddr, housePprice, houseHouses, houseTprice, houseModel, houseDecorate, houseProfee, houseAge, houseSort, houseType, houseConfig, houseFacility, houseWay, houseDirection, houseMark, id));
 		return pager;
+	}
+	@Override
+	public List<User> findUser() {
+		// TODO Auto-generated method stub
+		return houseMapper.findUser();
 	}
 
 	

@@ -29,18 +29,19 @@ public class HouseTest {
 		int pageno =0;
 		int pagesize =6;
 	Pager<House> list = service.findPager(pageno, pagesize, "houseArea", "asc",  null, null, null, null,
-			null, null, null, null, null, null, null, null, null, null, null, null);
+			null, null, null, null, null, null, null, null, null, null, null, null,null);
 	for(House h : list.getRows()){
 		System.out.println(h);
 	}
 	}
-//	@Test//findPagerTotal
-//	public void test3(){
-//		int pageno =0;
-//		int pagesize =6;
-//		long count =  service.findPagerTotal(pageno, pagesize, "houseArea", "asc", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null); 
-//		System.out.println("count:"+count);
-//	}
+	@Test//
+	public void test3(){
+		List<User> user = service.findUser();
+		System.out.println(user.size());
+		for(User u:user){
+			System.out.println(u.getUsername());
+		}
+	}
 	@Test
 	//findById
 	public void test4(){

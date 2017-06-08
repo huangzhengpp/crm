@@ -1,16 +1,20 @@
 package com.softfactory.house.service;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.softfactory.core.util.Pager;
 import com.softfactory.pojo.House;
+import com.softfactory.pojo.User;
 
 public interface HouseService {
 	int delete( Integer hid);
 	int updateStatus(House house);
 	int updateType(House house);
 	int addHouse(House house);
+	List<User> findUser();
 	House findById(Integer hid);
 	Pager<House> findPager(@Param("pageno") Integer pageno, 
 		      @Param("pagesize") Integer pagesize, 
@@ -26,6 +30,7 @@ public interface HouseService {
 		      @Param("houseProfee") String houseProfee,
 		      @Param("houseAge") String houseAge,
 		      @Param("houseSort") String houseSort,
+		      @Param("houseType") String houseType,
 		      @Param("houseConfig") String houseConfig,
 		      @Param("houseFacility") String houseFacility,
 		      @Param("houseWay") String houseWay,

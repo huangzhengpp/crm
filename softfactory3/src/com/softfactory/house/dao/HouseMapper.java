@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
-
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import com.softfactory.pojo.House;
+import com.softfactory.pojo.User;
 
 @Repository("houseMapper")
 public interface HouseMapper {
@@ -31,10 +32,22 @@ public interface HouseMapper {
 	 */
 	@Update("UPDATE house SET HOUSE_TYPE = #{houseType} where HID = #{hid}")
 	int updateType(House house);
+	
+	
 	/**
 	 * 增加房源
 	 */
 	int addHouse(House house);
+	
+	
+	/**
+	 * 查找出所有用户
+	 * @return
+	 */
+	//@Select("select USER_NAME,USER_SEX from USERS")
+	List<User> findUser();
+	
+	
 	/**
 	 * 通过id查找house
 	 * @param hid

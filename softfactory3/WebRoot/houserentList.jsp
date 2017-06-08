@@ -28,9 +28,9 @@
         <div style="padding: 0 0 0 6px;">
           	区域:
           <input type="text" id="ename" class="easyui-textbox"/>
-         &nbsp;&nbsp;部门:
-          <input id="dept" class="easyui-combobox" name="dept"   
-               data-options="editable:false,valueField:'deptno',textField:'dname',url:'deptController_find.html'" />
+         &nbsp;&nbsp;职业顾问:
+          <input id="user" class="easyui-combobox" name="user"   
+               data-options="editable:false,valueField:'id',textField:'username',url:'userController_find.html'" />
          
           <a href="#" class="easyui-linkbutton" iconCls="icon-search"
             onclick=emp_obj.search();>查询</a>
@@ -49,14 +49,14 @@
   $(function() {
     emp_obj = {
       search : function() {//查询
-        //获得部门号
-        var deptno = $('#dept').combobox('getValue');  
-        // alert(deptno);
+        //获得职业顾问
+        var userno = $('#user').combobox('getValue');  
+        // alert(userno);
         $("#houseDataGrid").datagrid(
             "load",
             {
               ename : $.trim($("#ename").val()),
-              deptno : deptno
+              userno : userno
             });
       },remove : function(){
         var rows = $("#houseDataGrid").datagrid("getSelections");
@@ -85,7 +85,7 @@
                       title : "提示",
                       msg : data + "个雇员被删除"
                     });
-                    $('#dept').combobox('reload');      
+                    $('#user').combobox('reload');      
                   }
                 }
               });
@@ -122,7 +122,7 @@
           onClose : function(){
             $("#houseDataGrid").datagrid(
             "reload");
-            $('#dept').combobox('reload');    
+            $('#user').combobox('reload');    
           }
         });
       }

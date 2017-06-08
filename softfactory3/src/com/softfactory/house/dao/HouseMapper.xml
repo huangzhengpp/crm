@@ -4,7 +4,14 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.softfactory.house.dao.HouseMapper">
-	
+	<select id="findUser" resultMap="user-result">
+		select * from USERS
+	</select>
+	<resultMap type="com.softfactory.pojo.User" id="user-result">
+		<id property="id" column="ID"/>
+		<result property="username" column="USER_NAME"/>
+		<result property="userSex" column="USER_SEX"/>
+	</resultMap>
 	<insert id="addHouse" parameterType="com.softfactory.pojo.House">
 	<selectKey order="BEFORE" keyProperty="hid" resultType="Integer">
 		select SEQ_HOUSE.nextval from dual
