@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softfactory.house.dao.HouseMapper">
+	
+	<insert id="addHouse" parameterType="com.softfactory.pojo.House">
+	<selectKey order="BEFORE" keyProperty="hid" resultType="Integer">
+		select SEQ_HOUSE.nextval from dual
+	</selectKey>
+		INSERT INTO HOUSE VALUES 
+			(#{hid}, #{user.id}, #{houseArea,jdbcType=VARCHAR}, #{houseAddr,jdbcType=VARCHAR}, #{housePprice,jdbcType=NUMERIC}, #{houseHouses,jdbcType=VARCHAR}, #{houseTprice,jdbcType=NUMERIC}, #{houseModel,jdbcType=VARCHAR}
+				, #{houseDecorate,jdbcType=VARCHAR}, #{houseProfee,jdbcType=VARCHAR}, #{houseAge,jdbcType=VARCHAR}, #{houseSort,jdbcType=VARCHAR}, #{houseType}
+					,  #{houseConfig,jdbcType=VARCHAR},  #{houseFacility,jdbcType=VARCHAR}, #{houseWay,jdbcType=VARCHAR}, #{houseDirection}
+						, #{houseMark,jdbcType=VARCHAR}, #{houseStatus}, SYSDATE, #{houseLandlord}, #{houseLandlordSex}, #{houseLandlordMark,jdbcType=VARCHAR}, #{houseLandlordPhone})
+	</insert>
+	<sql id="headsql">
+		select * from ( select row_number() over ( 
+	</sql>
+	<sql id="orderby">
+	<if test="sort !=null and order !=null">
+		order by 
+		<choose>
+			<when test="sort=='houseArea'">HOUSE_AREA</when>
+			<when test="sort=='houseAddr'">HOUSE_ADDR</when>
+			<when test="sort=='housePprice'">HOUSE_PPRICE</when>
+			<when test="sort=='houseHouses'">HOUSE_HOUSES</when>
+			<when test="sort=='houseTprice'">HOUSE_TPRICE</when>
+			<when test="sort=='houseModel'">HOUSE_MODEL</when>
+			<when test="sort=='houseDecorate'">HOUSE_DECORATE</when>
+			<when test="sort=='houseProfee'">HOUSE_PROFEE</when>
+			<when test="sort=='houseAge'">HOUSE_AGE</when>
+			<when test="sort=='houseSort'">HOUSE_SORT</when>
+			<when test="sort=='houseType'">HOUSE_TYPE</when>
+			<when test="sort=='houseConfig'">HOUSE_CONFIG</when>
+			<when test="sort=='houseFacility'">HOUSE_FACILITY</when>
+			<when test="sort=='houseWay'">HOUSE_WAY</when>
+			<when test="sort=='houseDirection'">HOUSE_DIRECTION</when>
+			<when test="sort=='houseMark'">HOUSE_MARK</when>
+			<when test="sort=='houseTime'">HOUSE_TIME</when>
+			<when test="sort=='user'">USER_NAME</when>
+			<otherwise>HOUSE_TIME</otherwise>
+		</choose>
+		<if test="order == 'asc'">asc</if>
+		<if test="order == 'desc'">desc</if>
+	</if>
+	</sql>
+	<sql id="wherecase">
+		<where>
+			1=1
+			<if test="houseArea !=null and houseArea !=''">  and HOUSE_AREA like #{houseArea}</if>
+			<if test="houseAddr !=null and houseAddr !=''">  and HOUSE_ADDR like #{houseAddr}</if>
+			<if test="housePprice !=null and housePprice !=''">  and HOUSE_PPRICE >= #{housePprice}</if>
+			<if test="houseHouses !=null and houseHouses !=''">  and HOUSE_HOUSES like #{houseHouses}</if>
+			<if test="houseTprice !=null and houseTprice !=''">  and HOUSE_TPRICE >= #{houseTprice}</if>
+			<if test="houseModel !=null and houseModel !=''">  and HOUSE_MODEL like #{houseModel}</if>
+			<if test="houseDecorate !=null and houseDecorate !=''">  and HOUSE_DECORATE like #{houseDecorate}</if>
+			<if test="houseProfee !=null and houseProfee !=''">  and HOUSE_PROFEE like #{houseProfee}</if>
+			<if test="houseAge !=null and houseAge !=''">  and HOUSE_AGE like #{houseAge}</if>
+			<if test="houseSort !=null and houseSort !=''">  and HOUSE_SORT like #{houseSort}</if>
+			<if test="houseType !=null and houseType !=''">  and HOUSE_TYPE = #{houseType}</if>
+			<if test="houseConfig !=null and houseConfig !=''">  and HOUSE_TYPE like #{houseConfig}</if>
+			<if test="houseFacility !=null and houseFacility !=''">  and HOUSE_FACILITY like #{houseFacility}</if>
+			<if test="houseWay !=null and houseWay !=''">  and HOUSE_WAY like #{houseWay}</if>
+			<if test="houseDirection !=null and houseDirection !=''">  and HOUSE_DIRECTION like #{houseDirection}</if>
+			<if test="houseMark !=null and houseMark !=''">  and HOUSE_MARK like #{houseMark}</if>
+			<if test="id !=null and id !=''"> and u.id = #{id}</if>
+		</where>
+	</sql>
+	<sql id="footsql">
+		<![CDATA[ ) where rn > #{pageno} and rn <= #{pagesize} ]]>
+	</sql>
+	<select id="findPager" resultMap="house-result">
+		<include refid="headsql"/>
+		<include refid="orderby"/>
+		) rn ,h.*,u.USER_NAME from house h left outer join users u on h.HOUSE_ID = u.id
+		<include refid="wherecase"/> 
+		<include refid="footsql"/> 
+	</select>
+	<!-- 查总数 -->
+	<select id="findPagerTotal" resultType="Integer">
+		select count(HID) from house h
+		<include refid="wherecase"/>
+	</select>
+	<select id="findById" resultMap="house-result">
+		select h.*,u.USER_NAME from house h ,users u  where h.HOUSE_ID = u.id and  hid = #{hid}
+	</select>
+	<resultMap type="com.softfactory.pojo.House" id="house-result">
+		<id property="hid" column="HID"/>
+		<result property="houseArea" column="HOUSE_AREA"/>
+		<result property="houseAddr" column="HOUSE_ADDR"/>
+		<result property="housePprice" column="HOUSE_PPRICE"/>
+		<result property="houseHouses" column="HOUSE_HOUSES"/>
+		<result property="houseTprice" column="HOUSE_TPRICE"/>
+		<result property="houseModel" column="HOUSE_MODEL"/>
+		<result property="houseDecorate" column="HOUSE_DECORATE"/>
+		<result property="houseProfee" column="HOUSE_PROFEE"/>
+		<result property="houseAge" column="HOUSE_AGE"/>
+		<result property="houseSort" column="HOUSE_SORT"/>
+		<result property="houseType" column="HOUSE_TYPE"/>
+		<result property="houseConfig" column="HOUSE_CONFIG"/>
+		<result property="houseFacility" column="HOUSE_FACILITY"/>
+		<result property="houseWay" column="HOUSE_WAY"/>
+		<result property="houseDirection" column="HOUSE_DIRECTION"/>
+		<result property="houseMark" column="HOUSE_MARK"/>
+		<result property="houseTime" column="HOUSE_TIME"/>
+		<association property="user" column="HOUSE_ID" javaType="com.softfactory.pojo.User">
+			<id property="id" column="ID"/>
+			<result property="username" column="USER_NAME"/>
+		</association>
+	</resultMap>
+</mapper>
+
